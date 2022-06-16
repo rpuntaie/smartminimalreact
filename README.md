@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+The project was created this way
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+``` sh
+npx create-react-app smartminimalreact -template javascript
+cd smartminimalreact
 
-## Available Scripts
+mkdir smartcontract
+cd smartcontract
+truffle init
+# add smartcontract
+# add 1_deploy.js (the x_ is needed for ordering)
 
-In the project directory, you can run:
+# to allow abi import add symlink to contracts to src
+cd smartminimalreact/src
+ln -s ../smartcontract/build/contracts
 
-### `npm start`
+# modify src/App.js
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+As it exists now one just needs to initialize it with
 
-### `npm test`
+``` sh
+npm install
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Start
 
-### `npm run build`
+``` sh
+ganache-cli
+#in another terminal
+cd smartcontract
+truffle test
+truffle migrate
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Change the contract address `src/App.js`.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+In Metamask
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- settings / enable test networks
+- click at the symbol to the right of the selected localhost network
+- import account from ganache-cli
+- click again on metamask to connect the new account (there should be a message)
 
-### `npm run eject`
+With Metamask also for the local ganache test network
+the account needs fund to pay for fee needed in smart contract calls.
+Else one can comment the lines using `window.ethereum` in `App.js`.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Then
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+``` sh
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+# Deploy
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Deploying to a non-test network an account from there to pay the fee for deployment.
+Fill in the mnemonic `...` in truffle-config.js,
+representing the private key of your account.
 
-## Learn More
+``` sh
+# change the pass phrase in smartcontract/truffle-config.js
+truffle migrate --network smartzeniq
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
