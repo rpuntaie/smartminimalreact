@@ -3,6 +3,7 @@ The project was created this way
 ``` sh
 npx create-react-app smartminimalreact -template javascript
 cd smartminimalreact
+npm install web3
 
 mkdir smartcontract
 cd smartcontract
@@ -41,7 +42,6 @@ In Metamask
 - settings / enable test networks
 - click at the symbol to the right of the selected localhost network
 - import account from ganache-cli
-- click again on metamask to connect the new account (there should be a message)
 
 With Metamask also for the local ganache test network
 the account needs fund to pay for fee needed in smart contract calls.
@@ -52,6 +52,8 @@ Then
 ``` sh
 npm start
 ```
+
+Click again on metamask to connect the previously imported account to the site.
 
 # Deploy
 
