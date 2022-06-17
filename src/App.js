@@ -1,12 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 
-// this produces errors
-// import Web3 from "web3"
-import Web3 from "../node_modules/web3/dist/web3.min.js";
 import smartcontract from './contracts/smartcontract.json'
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
+
+import { Helmet, HelmetProvider } from "react-helmet-async"
+const helmetContext = {};
 
 function App() {
 
@@ -14,32 +14,35 @@ function App() {
   const contract = useRef();
   const [n, setn] = useState(0);
 
-  useEffect(() => {
-    const setup = async ()=>{
-      var provider = null;
-      if (window.ethereum && window.ethereum.isMetaMask)
-          provider = window.ethereum;
-      else
-          provider = new Web3.providers.HttpProvider("http://localhost:8545");
-      web3.current = new Web3(provider);
-      contract.current = await new web3.current.eth.Contract(
+  function getWeb3() {
+      if (web3.current === undefined)
+          web3.current = new window.Web3(window.ethereum || "http://localhost:8545");
+      return web3.current;
+  }
+
+  async function getContract() {
+    if (contract.current === undefined) {
+      const web3 = getWeb3();
+      contract.current = await new web3.eth.Contract(
         smartcontract.abi,
-        "0x9982D7F33C900EbF89719fC18Aff2818C859e97c" // todo: change this address
+        "0x1d1Ce6B37606AfecCA257F25262211fB2C4C1eFA" // todo: change this address
       );
-    };
-    setup();
-  }, []);
+    }
+    return contract.current;
+  };
 
   async function PrintNumber() {
       setn(-1);
-      setn(await contract.current.methods.n().call());
+      const c  = await getContract();
+      setn(await c.methods.n().call());
   }
 
   async function ChangeNumber() {
       const value = Math.floor(Math.random() * 100);
       setn(-2);
-      const accounts = await web3.current.eth.getAccounts();
-      await contract.current.methods.setn(value).send({ from: accounts[0] });
+      const accounts = await getWeb3().eth.getAccounts();
+      const c  = await getContract();
+      await c.methods.setn(value).send({ from: accounts[0] });
       setn(value);
   }
 
@@ -58,18 +61,19 @@ function App() {
     )
   }
 
-  return (
+  return (<HelmetProvider context={helmetContext}>
+    <Helmet>
+      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"/>
+    </Helmet>
     <div className="App">
-      <header className="App-header">
+        <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-
         <button onClick={PrintNumber}>Print Number</button>
         <button onClick={ChangeNumber}>Change Number</button>
         <Status/>
-
       </header>
     </div>
-  );
+  </HelmetProvider>);
 }
 
 export default App;
